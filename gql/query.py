@@ -14,10 +14,13 @@ class Query(ObjectType):
 
     @staticmethod
     def resolve_mission_by_id(root, info, mission_id):
-        mission = db_session.query(MissionsModel).get(mission_id)
-        if mission is None:
-            raise GraphQLError('Mission not found')
-        return mission
+        try:
+            mission = db_session.query(MissionsModel).get(mission_id)
+            if mission is None:
+                raise GraphQLError('Mission not found')
+            return mission
+        except GraphQLError as err:
+            return err
 
     # Q -2
     mission_by_date_range = List(MissionsType, start_date=String(required=True), end_date=String(required=True))
@@ -26,14 +29,16 @@ class Query(ObjectType):
     def resolve_mission_by_date_range(root, info, start_date, end_date):
         start = datetime.strptime(start_date, '%Y-%m-%d').date()
         end = datetime.strptime(end_date, '%Y-%m-%d').date()
-        print('Start')
-        missions = (db_session.query(MissionsModel)
-                    .filter(MissionsModel.mission_date
-                            .between(start, end))
-                    .all())
-        if not missions:
-            raise GraphQLError('No missions found in the given date range')
-        return missions
+        try:
+            missions = (db_session.query(MissionsModel)
+                        .filter(MissionsModel.mission_date
+                                .between(start, end))
+                        .all())
+            if not missions:
+                raise GraphQLError('No missions found in the given date range')
+            return missions
+        except GraphQLError as err:
+            raise err
 
     # Q - 3
 
@@ -48,11 +53,14 @@ class Query(ObjectType):
         # INNER JOIN missions ON targets.mission_id = missions.mission_id\
         # WHERE targets.target_industry = "CITIES TOWNS AND URBAN AREAS ";
 
-        target = (db_session.query(TargetsModel)
-                  .join(TargetsModel.missions)
-                  .filter(TargetsModel.target_industry == target)
-                  .all()
-                  )
-        if not target:
-            raise GraphQLError('No missions found for the given target')
-        return target
+        try:
+            target = (db_session.query(TargetsModel)
+                      .join(TargetsModel.missions)
+                      .filter(TargetsModel.target_industry == target)
+                      .all()
+                      )
+            if not target:
+                raise GraphQLError('No missions found for the given target')
+            return target
+        except GraphQLError as err:
+            return err

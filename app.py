@@ -3,11 +3,12 @@ from flask_graphql import GraphQLView
 from graphene import Schema
 
 from database.connection import DB_URL, db_session, init_db
+from gql.mutation_action import ConfMutation
 from gql.query import Query
 
 app = Flask(__name__)
 
-schema = Schema(query=Query)
+schema = Schema(query=Query, mutation=ConfMutation)
 
 # Configure SQLAlchemy
 app.config["SQLALCHEMY_DATABASE_URI"] = DB_URL
