@@ -37,19 +37,19 @@ class MissionsModel(Base):
     aircraft_damaged = Column(Float)
     aircraft_lost = Column(Float)# float
 
-    # target = relationship('TargetsModel', back_populates='missions')
+    target = relationship('TargetsModel', back_populates='missions')
 
 class TargetsModel(Base):
     __tablename__ = "targets"
 
     target_id = Column(Integer, primary_key=True) # PK
-    mission_id = Column(Integer, ForeignKey("missions.missions_id"))# FK
+    mission_id = Column(Integer, ForeignKey("missions.mission_id"))# FK
     target_industry = Column(String)# string
     city_id = Column(Integer, ForeignKey("cities.city_id")) # FK
     target_type_id = Column(Integer, ForeignKey("cities.city_id"))# FK
     target_priority = Column(Integer)# int
 
-    # missions = relationship("TargetsModel", back_populates="target")
+    missions = relationship("MissionsModel", back_populates="target")
     # city = relationship("Cities", back_populates="targets")
     # target_type = relationship("TargetTypes", back_populates="targets")
 

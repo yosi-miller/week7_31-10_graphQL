@@ -1,0 +1,28 @@
+Q - 2
+query MissionByDateRange {
+    missionByDateRange(startDate: "1944-07-28", endDate: "1944-07-29") {
+        missionId
+        missionDate
+        airborneAircraft
+        attackingAircraft
+        bombingAircraft
+        aircraftReturned
+        aircraftFailed
+        aircraftDamaged
+        aircraftLost
+        id
+    }
+}
+
+Q - 4
+query MissionsByTarget {
+    missionsByTarget(target: "AIR FIELDS AND AIRDROMES") {
+        targetId
+        missionId
+        targetIndustry
+        cityId
+        targetTypeId
+        targetPriority
+        id
+    }
+}
